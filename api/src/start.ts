@@ -18,6 +18,7 @@ mongoose.connection.on('error', (err: { message: String; }) => {
 // import all of our models
 require('./models/Bug');
 require('./models/Fish');
+require('./models/Islander');
 
 // Start our app!
 const app = require('./app');
