@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
-console.log(`Your port is ${process.env.PORT}`);
-console.log(`Your db is ${process.env.DB_URI}`);
-
 // Connect to our Database and handle any bad connections
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
