@@ -3,7 +3,6 @@ import { rootHandler } from './handlers';
 import router from './routes';
 import bodyParser from 'body-parser';
 const cors = require('cors');
-
 const app = express();
 
 app.use(cors());

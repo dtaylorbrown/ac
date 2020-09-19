@@ -11,3 +11,12 @@ export const addBug = async (req: Request, res: Response) => {
     const bug = await (new BugModel(req.body)).save();
     res.json(bug);
 };
+
+export const getBugsCollection = async(req: Request, res: Response) => {
+    const bugs = await BugModel.find({
+      _id: {
+        $in: req.body.ids
+      }
+    });
+    res.json(bugs);
+}
