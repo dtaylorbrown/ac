@@ -4,7 +4,7 @@
 	import Fish from './routes/Fish.svelte'
 	import Navigation from './components/Navigation.svelte'
 
-	let currentPage = 'Home'
+	let currentPage = 'Bugs'
 	let pageComponents = { Home, Bugs, Fish }
 </script>
 

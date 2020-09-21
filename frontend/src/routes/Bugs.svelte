@@ -2,25 +2,60 @@
   import { onMount } from 'svelte'
   import Title from '../components/Title.svelte'
   import { post } from '../utils/post.js'
+  import { get } from '../utils/get.js'
 
-  let data
+  const endpoint = 'http://localhost:5555/bugs'
+  let bugs
 
-  const endpoint = 'http://localhost:5555/getBugsCollection'
-  const testData = {
-    "ids": [
-      "5f65110a91ba911fe0b3cc4a",
-      "5f65052e964a307f201ca372"
-    ]
-  }
+  // const testData = {
+  //   "ids": [
+  //     "5f65110a91ba911fe0b3cc4a",
+  //     "5f65052e964a307f201ca372"
+  //   ]
+  // }
 
-  onMount(() => post(endpoint, testData, res => data = res))
+  onMount(() => get(endpoint, res => bugs = res))
+
+  $: console.log('bugs', bugs)
 
 </script>
 
 <Title>Bugs Collection</Title>
 
-{#if data }
-  <pre>{ JSON.stringify(data, null, 2) }</pre>
+<img src="img/bulbasaur.png" alt="">
+
+{#if bugs}
+  <ul>
+    {#each bugs as bug}
+      <li>
+        <h4>{bug.name}</h4>
+        <table>
+          <tr>
+            <td>Hey</td>
+            <td>Hey</td>
+          </tr>
+          <tr>
+            <td>Hey</td>
+            <td>Hey</td>
+          </tr>
+        </table>
+      </li>
+    {/each}
+  </ul>
 {:else}
-  <p>Loading...</p>
+  <p>Loading bugs...</p>
 {/if}
+
+<style>
+  ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    padding: 20px;
+  }
+  ul li {
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+</style>
