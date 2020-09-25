@@ -1,5 +1,4 @@
 
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 (function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 var app = (function () {
     'use strict';
@@ -111,9 +110,6 @@ var app = (function () {
     function element(name) {
         return document.createElement(name);
     }
-    function svg_element(name) {
-        return document.createElementNS('http://www.w3.org/2000/svg', name);
-    }
     function text(data) {
         return document.createTextNode(data);
     }
@@ -156,39 +152,6 @@ var app = (function () {
     }
     function children(element) {
         return Array.from(element.childNodes);
-    }
-    function claim_element(nodes, name, attributes, svg) {
-        for (let i = 0; i < nodes.length; i += 1) {
-            const node = nodes[i];
-            if (node.nodeName === name) {
-                let j = 0;
-                const remove = [];
-                while (j < node.attributes.length) {
-                    const attribute = node.attributes[j++];
-                    if (!attributes[attribute.name]) {
-                        remove.push(attribute.name);
-                    }
-                }
-                for (let k = 0; k < remove.length; k++) {
-                    node.removeAttribute(remove[k]);
-                }
-                return nodes.splice(i, 1)[0];
-            }
-        }
-        return svg ? svg_element(name) : element(name);
-    }
-    function claim_text(nodes, data) {
-        for (let i = 0; i < nodes.length; i += 1) {
-            const node = nodes[i];
-            if (node.nodeType === 3) {
-                node.data = '' + data;
-                return nodes.splice(i, 1)[0];
-            }
-        }
-        return text(data);
-    }
-    function claim_space(nodes) {
-        return claim_text(nodes, ' ');
     }
     function custom_event(type, detail) {
         const e = document.createEvent('CustomEvent');
@@ -371,9 +334,6 @@ var app = (function () {
     }
     function create_component(block) {
         block && block.c();
-    }
-    function claim_component(block, parent_nodes) {
-        block && block.l(parent_nodes);
     }
     function mount_component(component, target, anchor) {
         const { fragment, on_mount, on_destroy, after_update } = component.$$;
@@ -1126,7 +1086,7 @@ var app = (function () {
     			if (default_slot) default_slot.c();
     		},
     		l: function claim(nodes) {
-    			if (default_slot) default_slot.l(nodes);
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			if (default_slot) {
@@ -1427,10 +1387,6 @@ var app = (function () {
     			if_block.c();
     			if_block_anchor = empty();
     		},
-    		l: function claim(nodes) {
-    			if_block.l(nodes);
-    			if_block_anchor = empty();
-    		},
     		m: function mount(target, anchor) {
     			if_blocks[current_block_type_index].m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
@@ -1496,9 +1452,6 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			if (default_slot) default_slot.c();
-    		},
-    		l: function claim(nodes) {
-    			if (default_slot) default_slot.l(nodes);
     		},
     		m: function mount(target, anchor) {
     			if (default_slot) {
@@ -1573,10 +1526,6 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			if (switch_instance) create_component(switch_instance.$$.fragment);
-    			switch_instance_anchor = empty();
-    		},
-    		l: function claim(nodes) {
-    			if (switch_instance) claim_component(switch_instance.$$.fragment, nodes);
     			switch_instance_anchor = empty();
     		},
     		m: function mount(target, anchor) {
@@ -1657,8 +1606,7 @@ var app = (function () {
     			if_block_anchor = empty();
     		},
     		l: function claim(nodes) {
-    			if (if_block) if_block.l(nodes);
-    			if_block_anchor = empty();
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			if (if_block) if_block.m(target, anchor);
@@ -1872,18 +1820,11 @@ var app = (function () {
     		c: function create() {
     			a = element("a");
     			if (default_slot) default_slot.c();
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			a = claim_element(nodes, "A", { href: true, "aria-current": true });
-    			var a_nodes = children(a);
-    			if (default_slot) default_slot.l(a_nodes);
-    			a_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
     			set_attributes(a, a_data);
     			add_location(a, file, 40, 0, 1249);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -2140,10 +2081,6 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = space();
     		},
-    		l: function claim(nodes) {
-    			t0 = claim_text(nodes, t0_value);
-    			t1 = claim_space(nodes);
-    		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t0, anchor);
     			insert_dev(target, t1, anchor);
@@ -2184,9 +2121,6 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			create_component(link.$$.fragment);
-    		},
-    		l: function claim(nodes) {
-    			claim_component(link.$$.fragment, nodes);
     		},
     		m: function mount(target, anchor) {
     			mount_component(link, target, anchor);
@@ -2249,22 +2183,11 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			nav = claim_element(nodes, "NAV", { class: true });
-    			var nav_nodes = children(nav);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].l(nav_nodes);
-    			}
-
-    			nav_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
     			attr_dev(nav, "class", "svelte-4bfyvb");
     			add_location(nav, file$1, 15, 0, 398);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, nav, anchor);
@@ -2404,18 +2327,11 @@ var app = (function () {
     		c: function create() {
     			h1 = element("h1");
     			if (default_slot) default_slot.c();
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			h1 = claim_element(nodes, "H1", { class: true });
-    			var h1_nodes = children(h1);
-    			if (default_slot) default_slot.l(h1_nodes);
-    			h1_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
     			attr_dev(h1, "class", "svelte-1gwqmzv");
     			add_location(h1, file$2, 0, 0, 0);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
@@ -2499,9 +2415,6 @@ var app = (function () {
     		c: function create() {
     			t = text("Home");
     		},
-    		l: function claim(nodes) {
-    			t = claim_text(nodes, "Home");
-    		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
     		},
@@ -2538,7 +2451,7 @@ var app = (function () {
     			create_component(title.$$.fragment);
     		},
     		l: function claim(nodes) {
-    			claim_component(title.$$.fragment, nodes);
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			mount_component(title, target, anchor);
@@ -2628,9 +2541,6 @@ var app = (function () {
     		c: function create() {
     			t = text("Bugs Collection");
     		},
-    		l: function claim(nodes) {
-    			t = claim_text(nodes, "Bugs Collection");
-    		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
     		},
@@ -2653,27 +2563,15 @@ var app = (function () {
     // (24:0) {:else}
     function create_else_block$1(ctx) {
     	let p;
-    	let t;
 
     	const block = {
     		c: function create() {
     			p = element("p");
-    			t = text("Loading...");
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			p = claim_element(nodes, "P", {});
-    			var p_nodes = children(p);
-    			t = claim_text(p_nodes, "Loading...");
-    			p_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
+    			p.textContent = "Loading...";
     			add_location(p, file$3, 24, 2, 495);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
-    			append_dev(p, t);
     		},
     		p: noop,
     		d: function destroy(detaching) {
@@ -2702,16 +2600,6 @@ var app = (function () {
     		c: function create() {
     			pre = element("pre");
     			t = text(t_value);
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			pre = claim_element(nodes, "PRE", {});
-    			var pre_nodes = children(pre);
-    			t = claim_text(pre_nodes, t_value);
-    			pre_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
     			add_location(pre, file$3, 22, 2, 440);
     		},
     		m: function mount(target, anchor) {
@@ -2767,10 +2655,7 @@ var app = (function () {
     			if_block_anchor = empty();
     		},
     		l: function claim(nodes) {
-    			claim_component(title.$$.fragment, nodes);
-    			t = claim_space(nodes);
-    			if_block.l(nodes);
-    			if_block_anchor = empty();
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			mount_component(title, target, anchor);
@@ -2890,9 +2775,6 @@ var app = (function () {
     		c: function create() {
     			t = text("Fish Collection");
     		},
-    		l: function claim(nodes) {
-    			t = claim_text(nodes, "Fish Collection");
-    		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
     		},
@@ -2929,7 +2811,7 @@ var app = (function () {
     			create_component(title.$$.fragment);
     		},
     		l: function claim(nodes) {
-    			claim_component(title.$$.fragment, nodes);
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			mount_component(title, target, anchor);
@@ -3035,15 +2917,6 @@ var app = (function () {
     			t2 = space();
     			create_component(route2.$$.fragment);
     		},
-    		l: function claim(nodes) {
-    			claim_component(navigation.$$.fragment, nodes);
-    			t0 = claim_space(nodes);
-    			claim_component(route0.$$.fragment, nodes);
-    			t1 = claim_space(nodes);
-    			claim_component(route1.$$.fragment, nodes);
-    			t2 = claim_space(nodes);
-    			claim_component(route2.$$.fragment, nodes);
-    		},
     		m: function mount(target, anchor) {
     			mount_component(navigation, target, anchor);
     			insert_dev(target, t0, anchor);
@@ -3110,7 +2983,7 @@ var app = (function () {
     			create_component(router.$$.fragment);
     		},
     		l: function claim(nodes) {
-    			claim_component(router.$$.fragment, nodes);
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			mount_component(router, target, anchor);
