@@ -1,28 +1,24 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
+  import { Link } from 'svelte-routing'
 
-  const dispatch = createEventDispatcher()
-
-  let menu = [
-    { active: true, label: 'Home' },
-    { active: false, label: 'Bugs' },
-    { active: false, label: 'Fish' }
+  let links = [
+    { label: 'Home', to: '/' },
+    { label: 'Bugs', to: '/bugs' },
+    { label: 'Fish', to: '/fish' }
   ]
 
-  const handleNavigation = label => {
-    menu = menu.map(item => ({ ...item, active: label === item.label }))
-    dispatch('navigate', label)
+  const getProps = () => ({ location, href, isPartiallyCurrent, isCurrent }) => {
+    const isActive = href === '/' ? isCurrent : isPartiallyCurrent || isCurrent
+    return isActive ? { class: 'active' } : {}
   }
 </script>
 
 <nav>
-  <ul>
-  {#each menu as { active, label }}
-    <li class:active on:click={ _ => handleNavigation(label) }>
+  {#each links as { label, to }}
+    <Link to="{ to }" getProps="{ getProps }">
       { label }
-    </li>
+    </Link>
   {/each}
-  </ul>
 </nav>
 
 <style>
@@ -32,22 +28,20 @@
     top: 0;
     width: 100%;
     height: 50px;
-    background-color: #6abf73;
-  }
-  ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    background-color: #6abf73;
   }
-  ul li {
+  nav a {
+    display: inline-block;
     color: #fff;
     margin: 0 20px;
     padding: 5px 0 2px 0;
     border-bottom: 3px solid transparent;
     cursor: pointer;
   }
-  ul li.active {
+  nav a.active {
     border-color: #fff;
   }
 </style>

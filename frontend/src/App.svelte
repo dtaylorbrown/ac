@@ -1,12 +1,16 @@
 <script>
+  import { Router, Route } from 'svelte-routing'
+	import Navigation from './components/Navigation.svelte'
 	import Home from './routes/Home.svelte'
 	import Bugs from './routes/Bugs.svelte'
 	import Fish from './routes/Fish.svelte'
-	import Navigation from './components/Navigation.svelte'
-
-	let currentPage = 'Bugs'
-	let pageComponents = { Home, Bugs, Fish }
+	export let url = ''
 </script>
 
-<Navigation on:navigate={ next => currentPage = next.detail } />
-<svelte:component this={ pageComponents[currentPage] } />
+<Router url="{ url }">
+  <Navigation />
+  <Route path="/" component="{ Home }" />
+  <Route path="/bugs" component="{ Bugs }" />
+  <Route path="/fish" component="{ Fish }" />
+</Router>
+

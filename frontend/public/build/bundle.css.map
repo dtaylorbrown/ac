@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "Navigation.svelte",
+    "Title.svelte",
+    "Bugs.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\n  import { Link } from 'svelte-routing'\n\n  let links = [\n    { label: 'Home', to: '/' },\n    { label: 'Bugs', to: '/bugs' },\n    { label: 'Fish', to: '/fish' }\n  ]\n\n  const getProps = () => ({ location, href, isPartiallyCurrent, isCurrent }) => {\n    const isActive = href === '/' ? isCurrent : isPartiallyCurrent || isCurrent\n    return isActive ? { class: 'active' } : {}\n  }\n</script>\n\n<nav>\n  {#each links as { label, to }}\n    <Link to=\"{ to }\" getProps=\"{ getProps }\">\n      { label }\n    </Link>\n  {/each}\n</nav>\n\n<style>\n  nav {\n    position: fixed;\n    left: 0;\n    top: 0;\n    width: 100%;\n    height: 50px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    background-color: #6abf73;\n  }\n  nav a {\n    display: inline-block;\n    color: #fff;\n    margin: 0 20px;\n    padding: 5px 0 2px 0;\n    border-bottom: 3px solid transparent;\n    cursor: pointer;\n  }\n  nav a.active {\n    border-color: #fff;\n  }\n</style>\n",
+    "<h1>\n  <slot></slot>\n</h1>\n\n<style>\n  h1 {\n    font-size: 40px;\n    margin: 30px 0;\n    text-align: center;\n  }\n</style>\n",
+    "<script>\n  import { onMount } from 'svelte'\n  import Title from '../components/Title.svelte'\n  import { post } from '../utils/post.js'\n  import { get } from '../utils/get.js'\n\n  const endpoint = 'http://localhost:5555/bugs'\n  let bugs\n\n  // const testData = {\n  //   \"ids\": [\n  //     \"5f65110a91ba911fe0b3cc4a\",\n  //     \"5f65052e964a307f201ca372\"\n  //   ]\n  // }\n\n  onMount(() => get(endpoint, res => bugs = res))\n\n  $: console.log('bugs', bugs)\n\n</script>\n\n<Title>Bugs Collection</Title>\n\n<img src=\"img/bulbasaur.png\" alt=\"\">\n\n{#if bugs}\n  <ul>\n    {#each bugs as bug}\n      <li>\n        <h4>{bug.name}</h4>\n        <table>\n          <tr>\n            <td>Hey</td>\n            <td>Hey</td>\n          </tr>\n          <tr>\n            <td>Hey</td>\n            <td>Hey</td>\n          </tr>\n        </table>\n      </li>\n    {/each}\n  </ul>\n{:else}\n  <p>Loading bugs...</p>\n{/if}\n\n<style>\n  ul {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    grid-gap: 20px;\n    padding: 20px;\n  }\n  ul li {\n    padding: 20px;\n    border-radius: 10px;\n    background: rgba(0, 0, 0, 0.05);\n  }\n</style>\n"
+  ],
+  "names": [],
+  "mappings": "AAwBE,GAAG,cAAC,CAAC,AACH,QAAQ,CAAE,KAAK,CACf,IAAI,CAAE,CAAC,CACP,GAAG,CAAE,CAAC,CACN,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,OAAO,CAAE,IAAI,CACb,eAAe,CAAE,MAAM,CACvB,WAAW,CAAE,MAAM,CACnB,gBAAgB,CAAE,OAAO,AAC3B,CAAC;AC7BD,EAAE,eAAC,CAAC,AACF,SAAS,CAAE,IAAI,CACf,MAAM,CAAE,IAAI,CAAC,CAAC,CACd,UAAU,CAAE,MAAM,AACpB,CAAC;ACwCD,EAAE,8BAAC,CAAC,AACF,OAAO,CAAE,IAAI,CACb,qBAAqB,CAAE,OAAO,CAAC,CAAC,CAAC,GAAG,CAAC,CACrC,QAAQ,CAAE,IAAI,CACd,OAAO,CAAE,IAAI,AACf,CAAC,AACD,iBAAE,CAAC,EAAE,eAAC,CAAC,AACL,OAAO,CAAE,IAAI,CACb,aAAa,CAAE,IAAI,CACnB,UAAU,CAAE,KAAK,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,CAAC,IAAI,CAAC,AACjC,CAAC"
+}
