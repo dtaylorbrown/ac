@@ -1,5 +1,5 @@
 <script>
-  import { Link } from 'svelte-routine'
+  import { Link } from 'svelte-routing'
 
   let links = [
     { label: 'Home', to: '/' },

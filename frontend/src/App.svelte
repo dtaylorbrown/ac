@@ -1,4 +1,3 @@
-hello
 <script>
   import { Router, Route } from 'svelte-routing'
 	import Navigation from './components/Navigation.svelte'
@@ -10,8 +9,8 @@ hello
 
 <Router url="{ url }">
   <Navigation />
-  <Route path="/" component={ Home } />
-  <Route path="/bugs" component={ Bugs } />
-  <Route path="/fish" component={ Fish } />
+  <Route path="/" component="{ Home }" />
+  <Route path="/bugs" component="{ Bugs }" />
+  <Route path="/fish" component="{ Fish }" />
 </Router>
 

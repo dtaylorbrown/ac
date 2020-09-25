@@ -11,10 +11,11 @@ server.get("*", function(req, res) {
 
   res.write(`
     <!DOCTYPE html>
+    <title>ACNH Collection Tracker!</title>
     <link rel='stylesheet' href='/global.css'>
-    <link rel='stylesheet' href='/bundle.css'>
+    <link rel='stylesheet' href='/build/bundle.css'>
     <div id="app">${html}</div>
-    <script src="/bundle.js"></script>
+    <script src="/build/bundle.js"></script>
   `);
 
   res.end();
