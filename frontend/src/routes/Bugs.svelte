@@ -22,13 +22,14 @@
 
 <Title>Bugs Collection</Title>
 
-<img src="img/bulbasaur.png" alt="">
-
 {#if bugs}
   <ul>
     {#each bugs as bug}
       <li>
         <h4>{bug.name}</h4>
+        {#if bug.icon}
+          <img src="{bug.icon}" alt="{bug.name}">
+        {/if}
         <table>
           <tr>
             <td>Hey</td>
